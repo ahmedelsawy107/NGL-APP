@@ -19,7 +19,7 @@ export async function register(req, res, next){
 
 export async function verifiyAccount(req, res, next){
     try{
-    const data = verifyAccount(verifyAccountDTO, req.body)
+    const data = validateBody(verifyAccountDTO, req.body)
     const {email, code} = data;
     const updatedUser = await authService.verifyAccount(email, code);
     res.json({
@@ -40,7 +40,7 @@ export async function login(req, res, next){
           const token = await authService.login(email, password);
           res.cookie('access_token', token, {
             httpOnly: true, // BE http request -> set or modify not js code
-            maxAge: toMs(1, 'houres')
+            maxAge: toMs(1, 'hours')
           });
           res.json({
             message: 'User Login Successfully',
@@ -85,6 +85,6 @@ export async function loginWithGoogle(req, res, next){
         });
         res.json({message: "user login successfully", success: true})
     }catch(error){
-
+        next(error)
     }
 }

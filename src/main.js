@@ -28,7 +28,8 @@ app.use('/message', messageRouter);
 
 app.use((err, req, res, next)=>{
     
-    logger.error(err.message);
+    logger.error(err.stack || err.message);
+    console.error(err);
     
     if(err.isOperational === true){
     return res.status(err.statusCode).json({
